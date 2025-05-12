@@ -1,5 +1,9 @@
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        DungeonMap test = new DungeonMap(5,5);
+        while (test.anyOpen()) {
+            test.GenerateRooms();
+        }
+        System.out.println(1);
     }
 }
