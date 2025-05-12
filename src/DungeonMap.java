@@ -121,7 +121,7 @@ public class DungeonMap {
                             }
                             if (x - 1 >= 0&&rooms[x - 1][y + 1] == null) {
                                 possibleRooms.removeIf(room1 -> room1.getExits()[3]);
-                            } else if (rooms[x - 1][y + 1] != null && !rooms[x - 1][y + 1].getExits()[1]) {
+                            } else if (x - 1 >= 0&&rooms[x - 1][y + 1] != null && !rooms[x - 1][y + 1].getExits()[1]) {
                                 possibleRooms.removeIf(room1 -> room1.getExits()[3]);
                             }
                             if (x + 1 < rooms.length && rooms[x + 1][y + 1] == null) {
@@ -144,9 +144,9 @@ public class DungeonMap {
                             } else if (x-2 >= 0 && rooms[x - 2][y] != null && !rooms[x - 2][y].getExits()[1]) {
                                 possibleRooms.removeIf(room1 -> room1.getExits()[3]);
                             }
-                            if (y - 1 > 0 &&x - 1 > 0 && rooms[x - 1][y - 1] == null && y - 1 < 0) {
+                            if (y - 1 >= 0 &&x - 1 >= 0 && rooms[x - 1][y - 1] == null && y - 1 < 0) {
                                 possibleRooms.removeIf(room1 -> room1.getExits()[0]);
-                            } else if (x - 1 > 0 && rooms[x - 1][y - 1] != null && !rooms[x - 1][y - 1].getExits()[2]) {
+                            } else if (y-1>=0&&x - 1 >= 0 && rooms[x - 1][y - 1] != null && !rooms[x - 1][y - 1].getExits()[2]) {
                                 possibleRooms.removeIf(room1 -> room1.getExits()[0]);
                             }
                             if (x - 1 > 0 && y + 1 < rooms[x].length && rooms[x - 1][y + 1] == null) {
@@ -190,7 +190,7 @@ public class DungeonMap {
             }
         }
     }
-    public boolean anyOpen() {
+    public boolean isAnyOpen() {
         boolean is = false;
         for (int x = 0; x < rooms.length; x++) {
             for (int y = 0; y < rooms[x].length; y++) {
@@ -211,6 +211,18 @@ public class DungeonMap {
             }
         }
         return is;
+    }
+
+    public int getSpawnX() {
+        return spawn.x();
+    }
+
+    public int getSpawnY() {
+        return spawn.y();
+    }
+
+    public Room[][] getRooms() {
+        return rooms;
     }
 
 }
