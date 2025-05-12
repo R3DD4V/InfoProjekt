@@ -1,9 +1,15 @@
+import Entities.Player;
+
 public class Main {
     public static void main(String[] args) {
         DungeonMap test = new DungeonMap(5,5);
-        while (test.anyOpen()) {
+        while (test.isAnyOpen()) {
             test.GenerateRooms();
         }
-        System.out.println(1);
+        Player player = new Player(test.getSpawnX(), test.getSpawnY(), 1, test.getRooms());
+        while (true) {
+            player.move();
+        }
+
     }
 }
