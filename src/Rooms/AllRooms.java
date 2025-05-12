@@ -15,15 +15,12 @@ public class AllRooms {
         temp.add(new LPiece(2));
         temp.add(new LPiece(3));
 
-        temp.add(new RLPiece(0));
-        temp.add(new RLPiece(1));
-        temp.add(new RLPiece(2));
-        temp.add(new RLPiece(3));
-
         temp.add(new TPiece(0));
         temp.add(new TPiece(1));
         temp.add(new TPiece(2));
         temp.add(new TPiece(3));
+
+        temp.addAll(temp);
 
         temp.add(new End(0));
         temp.add(new End(1));
