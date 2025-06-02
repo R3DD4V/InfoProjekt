@@ -1,3 +1,5 @@
+package other;
+
 public class coord {
     private int X;
     private int Y;

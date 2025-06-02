@@ -1,7 +1,11 @@
 package Entities;
 
+import Remnants.HeroRemnant;
 import Remnants.Remnant;
 import Rooms.Room;
+import ShopsAndWorkstations.Station;
+import org.jetbrains.annotations.Nullable;
+import other.DungeonMap;
 
 import java.util.*;
 
@@ -12,16 +16,26 @@ public class Player extends Entity{
     protected Remnant[] remnants;
     private List<String> enemyNames = new ArrayList<>();
     private List<String> enemyHp = new ArrayList<>();
+    private List<Station> unlocked = new ArrayList<>();
+    private int difficulty;
 
-    public Player(int pX, int pY, int pLvl, Room[][] pRooms, Remnant pRemnant) {
+    public Player(int pX, int pY, int pLvl, @Nullable Room[][] pRooms, Remnant pRemnant) {
         super(pX, pY, pLvl);
         rooms = pRooms;
         remnants = new Remnant[3];
         remnants[0] = pRemnant;
-        this.ini = 5;
-        this.maxHp = 30;
-        this.hp = maxHp;
         enemy = false;
+        str = 3;
+        dex = 3;
+        maxHp = 10;
+        hp = maxHp;
+        wis = 3;
+        chr = 3;
+        ini = 3;
+    }
+
+    public Player() {
+        this(0, 0, 1, null, new HeroRemnant());
     }
 
     public void move() {
@@ -34,7 +48,7 @@ public class Player extends Entity{
             System.out.println("In what direction do you want to go?");
             System.out.println((directions[0] ? "[Forward] " : "") + (directions[1] ? "[Right] " : "") + (directions[2] ? "[Back] " : "") + (directions[3] ? "[Left]" : ""));
             String in = reader.nextLine();
-            if (Objects.equals(in, "forward") &&directions[0]) {
+            if (in.equalsIgnoreCase("forward") &&directions[0]) {
                 if (facing==0) {
                     RoomY-=1;
                 }
@@ -46,7 +60,7 @@ public class Player extends Entity{
                     RoomX-=1;
                 }
                 input = false;
-            } else if (Objects.equals(in, "right") &&directions[1]) {
+            } else if (in.equalsIgnoreCase("right") &&directions[1]) {
                 if (facing==0) {
                     RoomX+=1;
                 }
@@ -59,7 +73,7 @@ public class Player extends Entity{
                 }
                 facing+=1;
                 input = false;
-            } else if (Objects.equals(in, "back") &&directions[2]) {
+            } else if (in.equalsIgnoreCase("back") &&directions[2]) {
                 if (facing==0) {
                     RoomY+=1;
                 }
@@ -72,7 +86,7 @@ public class Player extends Entity{
                 }
                 facing+=2;
                 input = false;
-            } else if (Objects.equals(in, "left") &&directions[3]) {
+            } else if (in.equalsIgnoreCase("left") &&directions[3]) {
                 if (facing==0) {
                     RoomX-=1;
                 }
@@ -194,4 +208,40 @@ public class Player extends Entity{
         System.out.println(entity.getHpSt());
     }
 
+    public void enterDungeon(DungeonMap dungeonMap) {
+        this.rooms = dungeonMap.getRooms();
+        this.RoomX = dungeonMap.getSpawnX();
+        this.RoomY = dungeonMap.getSpawnY();
+        while (hp>0) {
+            move();
+        }
+    }
+
+    public void awake() {
+        System.out.println("You awake in a small, barely lit room. What do you wanna do?");
+        while (rooms == null) {
+            existInHub();
+        }
+    }
+
+    public void existInHub() {
+        System.out.print("[Dungeon]");
+        for (Station station:unlocked) {
+            System.out.print("    ["+station.getName()+"]");
+        }
+        System.out.println();
+        String answer = reader.nextLine();
+        if (answer.equalsIgnoreCase("dungeon")) {
+            DungeonMap dungeonMap = new DungeonMap(5+lvl/5);
+            dungeonMap.GenerateRooms();
+            enterDungeon(dungeonMap);
+        }
+        else {
+            for (Station station : unlocked) {
+                if (answer.equalsIgnoreCase(station.getName())) {
+                    station.Interact();
+                }
+            }
+        }
+    }
 }

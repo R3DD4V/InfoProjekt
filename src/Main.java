@@ -2,6 +2,7 @@ import Entities.Goblin;
 import Entities.Monster;
 import Entities.Player;
 import Remnants.HeroRemnant;
+import other.DungeonMap;
 
 public class Main {
     public static void main(String[] args) {
