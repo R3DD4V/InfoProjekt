@@ -1,6 +1,7 @@
 package Rooms;
 
 import Tiles.Tile;
+import roomType.roomType;
 
 /**The base class for all Rooms */
 public class Room {
@@ -9,6 +10,15 @@ public class Room {
      * <p></p>
      * WIP!! */
     private Tile[][] tiles;
+    private roomType type;
+
+    public Room() {
+
+    }
+
+    public roomType getType() {
+        return type;
+    }
 
     /**A boolean array with a length of 4 that shows which exits the room has
      * <p></p>
@@ -60,6 +70,14 @@ public class Room {
             boolean[] temp = exits;
             exits = new boolean[]{temp[3], temp[0], temp[1], temp[2]};
         }
+    }
+
+    public void genRoom() {
+        type = new roomType();
+    }
+
+    public void enter() {
+
     }
 
 

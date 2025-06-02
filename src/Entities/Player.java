@@ -1,5 +1,6 @@
 package Entities;
 
+import Remnants.Remnant;
 import Rooms.Room;
 
 import java.util.Objects;
@@ -9,10 +10,13 @@ public class Player extends Entity{
     private Scanner reader = new Scanner(System.in);
     private Room[][] rooms;
     private int facing = 0;
+    protected Remnant[] remnants;
 
-    public Player(int pX, int pY, int pLvl, Room[][] pRooms) {
+    public Player(int pX, int pY, int pLvl, Room[][] pRooms, Remnant pRemnant) {
         super(pX, pY, pLvl);
         rooms = pRooms;
+        remnants = new Remnant[3];
+        remnants[0] = pRemnant;
     }
 
     public void move() {
@@ -83,5 +87,21 @@ public class Player extends Entity{
 
         }
         System.out.println(RoomX+" "+RoomY);
+        enterRoom(rooms[RoomX][RoomY]);
     }
+
+    public void enterRoom(Room room) {
+        for (int i = 0; i < room.getType().getTraits().length; i++) {
+            if (room.getType().getTraits()[i]) {
+                Remnant remnant = remnants[(int) (Math.random() * remnants.length)];
+                while (remnant == null) {
+                    remnant = remnants[(int) (Math.random() * remnants.length)];
+                }
+
+                String line = remnant.getLines()[i][(int) (Math.random() * remnant.getLines()[i].length)];
+                System.out.println(line);
+            }
+        }
+    }
+
 }

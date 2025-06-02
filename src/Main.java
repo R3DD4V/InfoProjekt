@@ -1,4 +1,5 @@
 import Entities.Player;
+import Remnants.HeroRemnant;
 
 public class Main {
     public static void main(String[] args) {
@@ -6,7 +7,7 @@ public class Main {
         while (test.isAnyOpen()) {
             test.GenerateRooms();
         }
-        Player player = new Player(test.getSpawnX(), test.getSpawnY(), 1, test.getRooms());
+        Player player = new Player(test.getSpawnX(), test.getSpawnY(), 1, test.getRooms(), new HeroRemnant());
         while (true) {
             player.move();
         }

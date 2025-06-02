@@ -21,6 +21,7 @@ public class DungeonMap {
         rooms = new Room[sizeX][sizeY];
         spawn = new coord((int) (Math.random()*(sizeX)), (int) (Math.random()*(sizeY)));
         rooms[spawn.x()][spawn.y()] = new Entry(0);
+        rooms[spawn.x()][spawn.y()].genRoom();
 
 
     }
@@ -80,7 +81,9 @@ public class DungeonMap {
                                 possibleRooms.removeIf(room1 -> room1.getExits()[1]);
                             }
                             if (!possibleRooms.isEmpty()) {
-                                rooms[x][y - 1] = possibleRooms.get((int) (Math.random() * possibleRooms.size()));
+                                Room randRoom = possibleRooms.get((int) (Math.random() * possibleRooms.size()));
+                                randRoom.genRoom();
+                                rooms[x][y-1] = randRoom;
                             }
                         }
                     }
@@ -106,6 +109,7 @@ public class DungeonMap {
                             }
                             if (!possibleRooms.isEmpty()) {
                                 Room randRoom = possibleRooms.get((int) (Math.random() * possibleRooms.size()));
+                                randRoom.genRoom();
                                 rooms[x + 1][y] = randRoom;
                             }
                         }
@@ -130,7 +134,9 @@ public class DungeonMap {
                                 possibleRooms.removeIf(room1 -> room1.getExits()[1]);
                             }
                             if (!possibleRooms.isEmpty()) {
-                                rooms[x][y + 1] = possibleRooms.get((int) (Math.random() * possibleRooms.size()));
+                                Room randRoom = possibleRooms.get((int) (Math.random() * possibleRooms.size()));
+                                randRoom.genRoom();
+                                rooms[x][y+1] = randRoom;
                             }
                         }
                     }
@@ -156,6 +162,7 @@ public class DungeonMap {
                             }
                             if (!possibleRooms.isEmpty()) {
                                 Room randRoom = possibleRooms.get((int) (Math.random() * possibleRooms.size()));
+                                randRoom.genRoom();
                                 rooms[x - 1][y] = randRoom;
                             }
 
