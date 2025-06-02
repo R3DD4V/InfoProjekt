@@ -18,4 +18,8 @@ public class Entity {
         RoomY = pY;
         lvl = pLvl;
     }
+
+    public void myTurn() {
+
+    }
 }

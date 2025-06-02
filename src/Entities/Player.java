@@ -104,4 +104,8 @@ public class Player extends Entity{
         }
     }
 
+    public void combat(Monster[] enemies) {
+
+    }
+
 }
