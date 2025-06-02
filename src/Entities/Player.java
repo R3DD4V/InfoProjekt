@@ -3,8 +3,7 @@ package Entities;
 import Remnants.Remnant;
 import Rooms.Room;
 
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class Player extends Entity{
     private Scanner reader = new Scanner(System.in);
@@ -17,6 +16,9 @@ public class Player extends Entity{
         rooms = pRooms;
         remnants = new Remnant[3];
         remnants[0] = pRemnant;
+        this.ini = 5;
+        this.maxHp = 30;
+        this.hp = maxHp;
     }
 
     public void move() {
@@ -105,7 +107,47 @@ public class Player extends Entity{
     }
 
     public void combat(Monster[] enemies) {
-
+        List<Entity> order = new ArrayList<>();
+        order.addFirst(this);
+        order.addAll(List.of(enemies));
+        /*for (int i = 0; i < enemies.length; i++) {
+            boolean added = false;
+            for (int e = 0; e < order.size()&&!added; e++) {
+                if ( (order.get(e) == null || order.get(e) != null && enemies[i].ini > order.get(e).ini) && (e+1 >= order.size() || (e+1 < order.size() && (order.get(e + 1) == null || (order.get(e + 1) != null && enemies[i].ini > order.get(e + 1).ini))))) {
+                    for (int d = order.size()-1; d > e; d--) {
+                        order.set(d, order.get(d - 1));
+                    }
+                    order.add(e, enemies[i]);
+                    added = true;
+                }
+            }
+        }*/
+        order.sort(new Comparator<Entity>() {
+            @Override
+            public int compare(Entity o1, Entity o2) {
+                return Integer.compare(o2.ini, o1.ini);
+            }
+        });
+        int round = 0;
+        while (order.size()>1&&order.contains(this))  {
+            System.out.println("______________________");
+            System.out.println("Round "+round);
+            for (int i = 0; i < order.size();i++) {
+                Entity a = order.get(i);
+                if (a.hp<=0) {
+                    order.remove(a);
+                }
+            }
+            for (Entity e:order)  {
+                e.myTurn();
+            }
+            round+=1;
+        }
+    }
+    @Override
+    public void myTurn()  {
+        System.out.println("Player Turn");
+        this.hp-=1;
     }
 
 }

@@ -5,13 +5,14 @@ public class Entity {
     protected int RoomY;
 
     protected String name;
-    protected int lvl;
-    protected int hp;
-    protected int maxHp;
-    protected int str;
-    protected int dex;
-    protected int wis;
-    protected int chr;
+    protected int lvl = 0;
+    protected int hp = 0;
+    protected int maxHp = 0;
+    protected int str = 0;
+    protected int dex = 0;
+    protected int wis = 0;
+    protected int chr = 0;
+    protected int ini = 0;
 
     public Entity(int pX, int pY, int pLvl) {
         RoomX = pX;
