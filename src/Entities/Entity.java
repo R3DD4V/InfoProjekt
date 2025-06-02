@@ -1,5 +1,8 @@
 package Entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Entity {
     protected int RoomX;
     protected int RoomY;
@@ -13,6 +16,8 @@ public class Entity {
     protected int wis = 0;
     protected int chr = 0;
     protected int ini = 0;
+    protected boolean enemy;
+    protected int abs = 0;
 
     public Entity(int pX, int pY, int pLvl) {
         RoomX = pX;
@@ -20,7 +25,26 @@ public class Entity {
         lvl = pLvl;
     }
 
-    public void myTurn() {
+    public void myTurn(List<Entity> order, Entity player) {
 
+    }
+
+    public void attacked(int damage) {
+        if (damage>abs)  {
+            hp-=(damage-abs);
+            abs = 0;
+        }
+        else {
+            abs-=damage;
+        }
+    }
+
+    public String getHpSt()  {
+        if (hp >= 0) {
+            return "["+hp+"/"+maxHp+"]";
+        }
+        else {
+            return "[0/"+maxHp+"]";
+        }
     }
 }

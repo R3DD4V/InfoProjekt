@@ -10,6 +10,8 @@ public class Player extends Entity{
     private Room[][] rooms;
     private int facing = 0;
     protected Remnant[] remnants;
+    private List<String> enemyNames = new ArrayList<>();
+    private List<String> enemyHp = new ArrayList<>();
 
     public Player(int pX, int pY, int pLvl, Room[][] pRooms, Remnant pRemnant) {
         super(pX, pY, pLvl);
@@ -19,6 +21,7 @@ public class Player extends Entity{
         this.ini = 5;
         this.maxHp = 30;
         this.hp = maxHp;
+        enemy = false;
     }
 
     public void move() {
@@ -107,29 +110,37 @@ public class Player extends Entity{
     }
 
     public void combat(Monster[] enemies) {
+
         List<Entity> order = new ArrayList<>();
         order.addFirst(this);
         order.addAll(List.of(enemies));
-        /*for (int i = 0; i < enemies.length; i++) {
-            boolean added = false;
-            for (int e = 0; e < order.size()&&!added; e++) {
-                if ( (order.get(e) == null || order.get(e) != null && enemies[i].ini > order.get(e).ini) && (e+1 >= order.size() || (e+1 < order.size() && (order.get(e + 1) == null || (order.get(e + 1) != null && enemies[i].ini > order.get(e + 1).ini))))) {
-                    for (int d = order.size()-1; d > e; d--) {
-                        order.set(d, order.get(d - 1));
+        for (Entity e:order)  {
+            List<Entity> ofThis = new ArrayList<>();
+            ofThis.addAll(order);
+            ofThis.removeIf(entity -> (entity.getClass()!=e.getClass()));
+            if (ofThis.getFirst()==e) {
+                int counter = 1;
+                if (ofThis.size()>1) {
+                    for (Entity d:ofThis)  {
+                        d.name=d.name+counter;
+                        counter+=1;
                     }
-                    order.add(e, enemies[i]);
-                    added = true;
                 }
             }
-        }*/
+            if (e!=this) {
+                enemyNames.add(e.name);
+                enemyHp.add(e.getHpSt());
+            }
+        }
         order.sort(new Comparator<Entity>() {
             @Override
             public int compare(Entity o1, Entity o2) {
                 return Integer.compare(o2.ini, o1.ini);
             }
         });
-        int round = 0;
-        while (order.size()>1&&order.contains(this))  {
+        int round = 1;
+        boolean livin = true;
+        while (order.size()>1&&order.contains(this)&&livin)  {
             System.out.println("______________________");
             System.out.println("Round "+round);
             for (int i = 0; i < order.size();i++) {
@@ -138,16 +149,49 @@ public class Player extends Entity{
                     order.remove(a);
                 }
             }
-            for (Entity e:order)  {
-                e.myTurn();
+            for (int i = 0; i<order.size()&&livin;i++)  {
+                Entity e = order.get(i);
+                e.myTurn(order, this);
+                if (this.hp<=0)  {
+                    livin = false;
+                }
             }
             round+=1;
         }
     }
     @Override
-    public void myTurn()  {
-        System.out.println("Player Turn");
-        this.hp-=1;
+    public void myTurn(List<Entity> order, Entity player)  {
+        System.out.println("It is your turn, what do you want to do?");
+        System.out.println("[attack] [defend] [skill]");
+        Scanner scanner = new Scanner(System.in);
+        String answer = scanner.nextLine();
+
+        if (answer.equalsIgnoreCase("attack")) {
+            for (String string:enemyNames) {
+                System.out.print("    "+string);
+            }
+            System.out.println();
+            for (int i = 0; i < enemyHp.size();i++) {
+                String string = enemyHp.get(i);
+                System.out.print("    "+" ".repeat(enemyNames.get(i).length()-enemyNames.get(i).length()/2-(string.length()-string.length()/2))+string+" ".repeat(enemyNames.get(i).length()/2-string.length()/2));
+            }
+            System.out.println();
+            String answer2 = scanner.nextLine();
+            for (Entity d:order) {
+                if (answer2.equalsIgnoreCase(d.name)) {
+                    this.attack(d);
+                }
+            }
+        }
+
+
+    }
+
+    public void attack(Entity entity) {
+        int damage = 5+str;
+        entity.attacked(damage);
+        System.out.println("You attack "+entity.name+" for "+damage);
+        System.out.println(entity.getHpSt());
     }
 
 }
